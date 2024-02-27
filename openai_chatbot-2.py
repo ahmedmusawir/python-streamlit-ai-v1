@@ -36,14 +36,17 @@ with st.sidebar:
     st.title('MooseBot OpenAI')
 
     # Checking and Accepting the OpenAI API Key
-
-    openai.api_key = st.text_input('Enter OpenAI API token:', type='password')
-
-    if not (openai.api_key.startswith('sk') and len(openai.api_key) == 51):
-        st.warning('Please enter your credentials!', icon='⚠️')
-    
+    if 'OPENAI_API_KEY' in st.secrets:
+        st.success('API key already provided!', icon='✅')
+        openai.api_key = st.secrets(['OPENAI_API_KEY'])
     else:
-        st.success('Proceed to your chatbot prompting!', icon='👌')
+        openai.api_key = st.text_input('Enter OpenAI API token:', type='password')
+
+        if not (openai.api_key.startswith('sk') and len(openai.api_key) == 51):
+            st.warning('Please enter your credentials!', icon='⚠️')
+        
+        else:
+            st.success('Proceed to your chatbot prompting!', icon='👌')
 
 # Setting up messages to the session variables
 if "messages" not in st.session_state:
